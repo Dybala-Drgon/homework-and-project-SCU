@@ -1,164 +1,89 @@
-#include "staff.h"
-#include<cstdio>
-#include<iostream>
-using namespace std;
-
-void showinfo(staff* ptr) {
-	ptr->show();
-}	   //ÊµÏÖĞéº¯Êı×÷ÓÃ
-
-void staff::Setinfo()
+#pragma once
+class staff	   //æ™®é€šèŒå‘˜ç±»
 {
-	cout << "ÊäÈëid" << endl;
-	cin >> ID;
-	getchar();//³Ôµô»Ø³µ
-	cout << "ÊäÈëname" << endl;
-	cin >> Name;
-	getchar();
-	cout << "ÊäÈë»ù±¾¹¤×Ê" << endl;
-	cin >> Basic_salary;
-	Salary_sum = Basic_salary;//»ù´¡Ö°Ô±Ö»ÓĞ»ù±¾¹¤×Ê
-}//ÉèÖÃÖ°Ô±
+private:
+	char ID[6];
+	char Name[21];
+	double Basic_salary;
+	double Salary_sum;
+	char pos[10] = { "æ™®é€šèŒå‘˜" };
+public:									
+	void Setinfo();
+	virtual void show();//è®¾ç½®è™šå‡½æ•°
+	char* GetID();
+	char* GetName();	
+	inline
+		double GetBasic_salary()const;
+	inline
+		double GetSalary_sum()const;	//è®¾ç½®æˆå†…è”å‡½æ•°èŠ‚çœç©ºé—´
+	void setsalary(double basic, double classhour, double exper, double admin);		 //è®¡ç®—è–ªèµ„
+	staff* next;//ä½¿ç”¨é“¾è¡¨è¿›è¡Œå¢åˆ æ”¹æŸ¥
+	int num;//æ€»æ•°
+};
+	 
 
-void staff::show()
-{
-	cout << "ID\t\t" << "NAME\t" << "»ù´¡¹¤×Ê\t" << "¹¤×Ê×ÜºÍ\t" <<"Àà±ğ"<< endl;
-	//Ê¹ÓÃprintf·½±ãÊä³ö
-	printf("%-6s\t\t%s\t%-8.2f\t%-8.2f\t%s\n", ID, Name, Basic_salary, Salary_sum,pos);
-}
 
-char* staff::GetID()
-{
-	return ID;
-}
+//è¿™æ˜¯æ•™å¸ˆç±»	ä½¿ç”¨è™šåŸºç±»ç»§æ‰¿
+class Teacher :virtual public staff {	 
+public:
+	 virtual void show();//è®¾ç½®è™šå‡½æ•°ï¼Œå®ç°å¤šæ€
+	 void Setinfo();	//é‡å†™å‡½æ•°ï¼Œå®ç°å¤šæ€
+	 void Setclass_hour_salary();
+	 double get_class_hour_salary();
+	 Teacher* next;//ä½¿ç”¨é“¾è¡¨è¿›è¡Œå¢åˆ æ”¹æŸ¥
+	 int num;//æ€»æ•°
+	 Teacher() { next = nullptr; }
+private: 
+	double class_hour_salary;//è¯¾æ—¶è¡¥åŠ©
+	 char pos[10] = { "ä»»è¯¾æ•™å¸ˆ" };
+};	  
 
-char* staff::GetName()
-{
-	return Name;
-}
+//è¿™æ˜¯å®éªŒå‘˜ç±»	   è™šåŸºç±»ç»§æ‰¿
+class Experimenter :virtual public staff {
+public:
+	virtual void show();//è®¾ç½®è™šå‡½æ•°ï¼Œå®ç°å¤šæ€
+	void Setinfo();		//é‡å†™å‡½æ•°ï¼Œå®ç°å¤šæ€
+	void Setexper_subsidy();
+	double get_exper_subsidy();
+	int num;//æ€»æ•°
+	Experimenter* next;//ä½¿ç”¨é“¾è¡¨è¿›è¡Œå¢åˆ æ”¹æŸ¥
+	Experimenter() { next = nullptr; }
+private:
+	double exper_subsidy;//å®éªŒå®¤è¡¥åŠ©
+	char pos[10] = { "å®éªŒå‘˜" };
+};
 
-inline double staff::GetBasic_salary() const
-{
-	return Basic_salary;
-}
+//è¿™æ˜¯è¡Œæ”¿äººå‘˜ç±»	 è™šåŸºç±»ç»§æ‰¿
+class Admini :virtual public staff {
+public:
+	virtual void show();//è®¾ç½®è™šå‡½æ•°ï¼Œå®ç°å¤šæ€
+	void Setinfo();		//é‡å†™å‡½æ•°ï¼Œå®ç°å¤šæ€
+	void Setadmin_subsidy();
+	double get_admin_subsidy();
+	Admini* next;//ä½¿ç”¨é“¾è¡¨è¿›è¡Œå¢åˆ æ”¹æŸ¥
+	int num;//æ€»æ•°
+	Admini() { next = nullptr; }
+private:
+	double admin_subsidy;//è¡Œæ”¿è¡¥åŠ©
+	char pos[10] = { "è¡Œæ”¿äººå‘˜" };
+};
 
-inline double staff::GetSalary_sum() const
-{
-	return Salary_sum;
-}
+class Teacher_Experimenter :public Teacher, public Experimenter {
+public:
+	void show();   //æ²¡å†™virtualä¹Ÿé»˜è®¤æ˜¯virtualç±»å‹
+	void Setinfo();
+	Teacher_Experimenter* next;//ä½¿ç”¨é“¾è¡¨è¿›è¡Œå¢åˆ æ”¹æŸ¥
+	int num;//æ€»æ•°
+	Teacher_Experimenter() { next = nullptr; }
+};
 
-void staff::setsalary(double basic, double classhour, double exper, double admin)
-{
-	Salary_sum = basic + classhour + exper+admin;
-}
+class Admini_Teacher :public Teacher, public Admini {
+public:
+	void show();   //æ²¡å†™virtualä¹Ÿé»˜è®¤æ˜¯virtualç±»å‹
+	void Setinfo();
+	Admini_Teacher* next;//ä½¿ç”¨é“¾è¡¨è¿›è¡Œå¢åˆ æ”¹æŸ¥
+	Admini_Teacher() { next = nullptr; }
+	int num;//æ€»æ•°
+};
 
-void Teacher::show()
-{
-	cout << "ID\t" << "NAME\t" << "»ù´¡¹¤×Ê\t" << "¹¤×Ê×ÜºÍ\t" <<"¿ÎÊ±²¹Öú\t"<< "Àà±ğ" << endl;
-	//Ê¹ÓÃprintf·½±ãÊä³ö
-	printf("%-6s\t%s\t%-8.2f\t%-8.2f\t%-8.2f\tÈÎ¿Î½ÌÊ¦\n", GetID(), GetName(),GetBasic_salary(),GetSalary_sum(),class_hour_salary );
-}
-
-void Teacher::Setinfo()
-{
-	staff::Setinfo();
-	cout << "ÊäÈë¿ÎÊ±²¹Öú" << endl;
-	cin >> class_hour_salary;
-	setsalary(GetBasic_salary(), class_hour_salary, 0, 0);
-}
-
-void Teacher::Setclass_hour_salary()
-{
-	cout << "¿ÎÊ±²¹Öú" << endl;
-	cin >> class_hour_salary;
-}
-
-double Teacher::get_class_hour_salary()
-{
-	return class_hour_salary;
-}
-
-void Experimenter::show()
-{
-	cout << "ID\t" << "NAME\t" << "»ù´¡¹¤×Ê\t" << "¹¤×Ê×ÜºÍ\t" << "ÊµÑéÊÒ²¹Öú\t" << "Àà±ğ" << endl;
-	//Ê¹ÓÃprintf·½±ãÊä³ö
-	printf("%-6s\t%s\t%-8.2f\t%-8.2f\t%-8.2f\tÊµÑéÔ±\n", GetID(), GetName(), GetBasic_salary(), GetSalary_sum(), exper_subsidy);
-}
-
-void Experimenter::Setinfo()
-{
-	staff::Setinfo();
-	cout << "ÊµÑéÊÒ²¹Öú" << endl;
-	cin >> exper_subsidy;
-	setsalary(GetBasic_salary(), 0, exper_subsidy, 0);
-}
-
-void Experimenter::Setexper_subsidy()
-{
-
-	cout << "ÊµÑéÊÒ²¹Öú" << endl;
-	cin >> exper_subsidy;
-}
-
-double Experimenter::get_exper_subsidy()
-{
-	return exper_subsidy;
-}
-
-void Admini::show()
-{
-	cout << "ID\t" << "NAME\t" << "»ù´¡¹¤×Ê\t" << "¹¤×Ê×ÜºÍ\t" << "ĞĞÕş²¹Öú\t" << "Àà±ğ" << endl;
-	//Ê¹ÓÃprintf·½±ãÊä³ö
-	printf("%-6s\t%s\t%-8.2f\t%-8.2f\t%-8.2f\tĞĞÕşÈËÔ±\n", GetID(), GetName(), GetBasic_salary(), GetSalary_sum(), admin_subsidy);
-}
-
-void Admini::Setinfo()
-{
-	staff::Setinfo();
-	cout << "ĞĞÕş²¹Öú" << endl;
-	cin >> admin_subsidy;
-	setsalary(GetBasic_salary(), 0, 0,admin_subsidy);
-}
-
-void Admini::Setadmin_subsidy()
-{
-	cout << "ĞĞÕş²¹Öú" << endl;
-	cin >> admin_subsidy;
-}
-
-double Admini::get_admin_subsidy()
-{
-	return admin_subsidy;
-}
-
-void Teacher_Experimenter::show()
-{
-	cout << "ID\t" << "NAME\t" << "»ù´¡¹¤×Ê\t" << "¹¤×Ê×ÜºÍ\t" << "¿ÎÊ±ºÍÊµÑé²¹Öú\t" << "  Àà±ğ" << endl;
-	//Ê¹ÓÃprintf·½±ãÊä³ö
-	printf("%-6s\t%s\t%-8.2f\t%-8.2f\t%-7.2fºÍ%-7.2f ½ÌÊ¦¼æÊµÑéÔ±\n", GetID(), GetName(), GetBasic_salary(), GetSalary_sum(), get_class_hour_salary(),get_exper_subsidy());
- }
-
-void Teacher_Experimenter::Setinfo()
-{
-	staff::Setinfo();
-	Setexper_subsidy();
-	Setclass_hour_salary();
-	setsalary(GetBasic_salary(), get_class_hour_salary(), get_exper_subsidy(), 0);
-}
-
-void Admini_Teacher::show()
-{
-	cout << "ID\t" << "NAME\t" << "»ù´¡¹¤×Ê\t" << "¹¤×Ê×ÜºÍ\t" << "¿ÎÊ±ºÍĞĞÕş²¹Öú\t" << "  Àà±ğ" << endl;
-	//Ê¹ÓÃprintf·½±ãÊä³ö
-	printf("%-6s\t%s\t%-8.2f\t%-8.2f\t%-7.2fºÍ%-7.2f ½ÌÊ¦¼æĞĞÕşÈËÔ±\n", GetID(), GetName(), GetBasic_salary(), GetSalary_sum(), get_class_hour_salary(), get_admin_subsidy());
-
-}
-
-void Admini_Teacher::Setinfo()
-{
-	staff::Setinfo();
-	Setadmin_subsidy();
-	Setclass_hour_salary();
-	setsalary(GetBasic_salary(), get_class_hour_salary(), 0,get_admin_subsidy());
-
-}
+void showinfo(staff* ptr); 	   //å®ç°è™šå‡½æ•°ä½œç”¨
