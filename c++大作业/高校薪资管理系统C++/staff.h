@@ -1,72 +1,89 @@
 #pragma once
-class staff	   //ÆÕÍ¨Ö°Ô±Àà
+class staff	   //æ™®é€šèŒå‘˜ç±»
 {
 private:
 	char ID[6];
 	char Name[21];
 	double Basic_salary;
 	double Salary_sum;
-	char pos[10] = { "ÆÕÍ¨Ö°Ô±" };
-public:
+	char pos[10] = { "æ™®é€šèŒå‘˜" };
+public:									
 	void Setinfo();
-	virtual void show();//ÉèÖÃĞéº¯Êı
+	virtual void show();//è®¾ç½®è™šå‡½æ•°
 	char* GetID();
 	char* GetName();	
 	inline
 		double GetBasic_salary()const;
 	inline
-		double GetSalary_sum()const;	//ÉèÖÃ³ÉÄÚÁªº¯Êı½ÚÊ¡¿Õ¼ä
-	void setsalary(double basic, double classhour, double exper, double admin);		 //¼ÆËãĞ½×Ê
-
+		double GetSalary_sum()const;	//è®¾ç½®æˆå†…è”å‡½æ•°èŠ‚çœç©ºé—´
+	void setsalary(double basic, double classhour, double exper, double admin);		 //è®¡ç®—è–ªèµ„
+	staff* next;//ä½¿ç”¨é“¾è¡¨è¿›è¡Œå¢åˆ æ”¹æŸ¥
+	int num;//æ€»æ•°
 };
 	 
 
 
-//ÕâÊÇ½ÌÊ¦Àà	Ê¹ÓÃĞé»ùÀà¼Ì³Ğ
+//è¿™æ˜¯æ•™å¸ˆç±»	ä½¿ç”¨è™šåŸºç±»ç»§æ‰¿
 class Teacher :virtual public staff {	 
 public:
-	 virtual void show();//ÉèÖÃĞéº¯Êı£¬ÊµÏÖ¶àÌ¬
-	 void Setinfo();	//ÖØĞ´º¯Êı£¬ÊµÏÖ¶àÌ¬
+	 virtual void show();//è®¾ç½®è™šå‡½æ•°ï¼Œå®ç°å¤šæ€
+	 void Setinfo();	//é‡å†™å‡½æ•°ï¼Œå®ç°å¤šæ€
 	 void Setclass_hour_salary();
 	 double get_class_hour_salary();
+	 Teacher* next;//ä½¿ç”¨é“¾è¡¨è¿›è¡Œå¢åˆ æ”¹æŸ¥
+	 int num;//æ€»æ•°
+	 Teacher() { next = nullptr; }
 private: 
-	double class_hour_salary;//¿ÎÊ±²¹Öú
-	 char pos[10] = { "ÈÎ¿Î½ÌÊ¦" };
+	double class_hour_salary;//è¯¾æ—¶è¡¥åŠ©
+	 char pos[10] = { "ä»»è¯¾æ•™å¸ˆ" };
 };	  
 
-//ÕâÊÇÊµÑéÔ±Àà	   Ğé»ùÀà¼Ì³Ğ
+//è¿™æ˜¯å®éªŒå‘˜ç±»	   è™šåŸºç±»ç»§æ‰¿
 class Experimenter :virtual public staff {
 public:
-	virtual void show();//ÉèÖÃĞéº¯Êı£¬ÊµÏÖ¶àÌ¬
-	void Setinfo();		//ÖØĞ´º¯Êı£¬ÊµÏÖ¶àÌ¬
+	virtual void show();//è®¾ç½®è™šå‡½æ•°ï¼Œå®ç°å¤šæ€
+	void Setinfo();		//é‡å†™å‡½æ•°ï¼Œå®ç°å¤šæ€
 	void Setexper_subsidy();
 	double get_exper_subsidy();
+	int num;//æ€»æ•°
+	Experimenter* next;//ä½¿ç”¨é“¾è¡¨è¿›è¡Œå¢åˆ æ”¹æŸ¥
+	Experimenter() { next = nullptr; }
 private:
-	double exper_subsidy;//ÊµÑéÊÒ²¹Öú
-	char pos[10] = { "ÊµÑéÔ±" };
+	double exper_subsidy;//å®éªŒå®¤è¡¥åŠ©
+	char pos[10] = { "å®éªŒå‘˜" };
 };
 
-//ÕâÊÇĞĞÕşÈËÔ±Àà	 Ğé»ùÀà¼Ì³Ğ
+//è¿™æ˜¯è¡Œæ”¿äººå‘˜ç±»	 è™šåŸºç±»ç»§æ‰¿
 class Admini :virtual public staff {
 public:
-	virtual void show();//ÉèÖÃĞéº¯Êı£¬ÊµÏÖ¶àÌ¬
-	void Setinfo();		//ÖØĞ´º¯Êı£¬ÊµÏÖ¶àÌ¬
+	virtual void show();//è®¾ç½®è™šå‡½æ•°ï¼Œå®ç°å¤šæ€
+	void Setinfo();		//é‡å†™å‡½æ•°ï¼Œå®ç°å¤šæ€
 	void Setadmin_subsidy();
 	double get_admin_subsidy();
+	Admini* next;//ä½¿ç”¨é“¾è¡¨è¿›è¡Œå¢åˆ æ”¹æŸ¥
+	int num;//æ€»æ•°
+	Admini() { next = nullptr; }
 private:
-	double admin_subsidy;//ĞĞÕş²¹Öú
-	char pos[10] = { "ĞĞÕşÈËÔ±" };
+	double admin_subsidy;//è¡Œæ”¿è¡¥åŠ©
+	char pos[10] = { "è¡Œæ”¿äººå‘˜" };
 };
 
 class Teacher_Experimenter :public Teacher, public Experimenter {
 public:
-	void show();   //Ã»Ğ´virtualÒ²Ä¬ÈÏÊÇvirtualÀàĞÍ
+	void show();   //æ²¡å†™virtualä¹Ÿé»˜è®¤æ˜¯virtualç±»å‹
 	void Setinfo();
-	
+	Teacher_Experimenter* next;//ä½¿ç”¨é“¾è¡¨è¿›è¡Œå¢åˆ æ”¹æŸ¥
+	int num;//æ€»æ•°
+	Teacher_Experimenter() { next = nullptr; }
 };
 
 class Admini_Teacher :public Teacher, public Admini {
 public:
-	void show();   //Ã»Ğ´virtualÒ²Ä¬ÈÏÊÇvirtualÀàĞÍ
+	void show();   //æ²¡å†™virtualä¹Ÿé»˜è®¤æ˜¯virtualç±»å‹
 	void Setinfo();
+	Admini_Teacher* next;//ä½¿ç”¨é“¾è¡¨è¿›è¡Œå¢åˆ æ”¹æŸ¥
+	Admini_Teacher() { next = nullptr; }
+	int num;//æ€»æ•°
 };
+
+void showinfo(staff* ptr); 	   //å®ç°è™šå‡½æ•°ä½œç”¨
