@@ -7,7 +7,7 @@ using namespace std;
 
 void staff::Setinfo()
 {
-	cout << "输入id" << endl;
+	cout << "输入6位id" << endl;
 	cin >> ID;
 	getchar();//吃掉回车
 	cout << "输入name" << endl;
@@ -77,6 +77,16 @@ double Teacher::get_class_hour_salary()
 	return class_hour_salary;
 }
 
+void Teacher::showall()
+{
+	printf("%-6s\t%s\t%-8.2f\t%-8.2f\t%-8.2f\t任课教师\n", GetID(), GetName(), GetBasic_salary(), GetSalary_sum(), class_hour_salary);
+}
+
+void Teacher::showmenu()
+{
+	cout << "ID\t" << "NAME\t" << "基础工资\t" << "工资总和\t" << "课时补助\t" << "类别" << endl;
+}
+
 void Experimenter::show()
 {
 	cout << "ID\t" << "NAME\t" << "基础工资\t" << "工资总和\t" << "实验室补助\t" << "类别" << endl;
@@ -102,6 +112,16 @@ void Experimenter::Setexper_subsidy()
 double Experimenter::get_exper_subsidy()
 {
 	return exper_subsidy;
+}
+
+void Experimenter::showall()
+{
+	printf("%-6s\t%s\t%-8.2f\t%-8.2f\t%-8.2f\t实验员\n", GetID(), GetName(), GetBasic_salary(), GetSalary_sum(), exper_subsidy);
+}
+
+void Experimenter::showmenu()
+{
+	cout << "ID\t" << "NAME\t" << "基础工资\t" << "工资总和\t" << "实验室补助\t" << "类别" << endl;
 }
 
 void Admini::show()
@@ -130,6 +150,16 @@ double Admini::get_admin_subsidy()
 	return admin_subsidy;
 }
 
+void Admini::showall()
+{
+	printf("%-6s\t%s\t%-8.2f\t%-8.2f\t%-8.2f\t行政人员\n", GetID(), GetName(), GetBasic_salary(), GetSalary_sum(), admin_subsidy);
+}
+
+void Admini::showmenu()
+{
+	cout << "ID\t" << "NAME\t" << "基础工资\t" << "工资总和\t" << "行政补助\t" << "类别" << endl;
+}
+
 void Teacher_Experimenter::show()
 {
 	cout << "ID\t" << "NAME\t" << "基础工资\t" << "工资总和\t" << "课时和实验补助\t" << "  类别" << endl;
@@ -144,6 +174,16 @@ void Teacher_Experimenter::Setinfo()
 	Setclass_hour_salary();
 	setsalary(GetBasic_salary(), get_class_hour_salary(), get_exper_subsidy(), 0);
 	getchar();//吃掉回车
+}
+
+void Teacher_Experimenter::showall()
+{
+	printf("%-6s\t%s\t%-8.2f\t%-8.2f\t%-7.2f和%-7.2f 教师兼实验员\n", GetID(), GetName(), GetBasic_salary(), GetSalary_sum(), get_class_hour_salary(), get_exper_subsidy());
+}
+
+void Teacher_Experimenter::showmenu()
+{
+	cout << "ID\t" << "NAME\t" << "基础工资\t" << "工资总和\t" << "课时和实验补助\t" << "  类别" << endl;
 }
 
 void Admini_Teacher::show()
@@ -162,6 +202,16 @@ void Admini_Teacher::Setinfo()
 	setsalary(GetBasic_salary(), get_class_hour_salary(), 0,get_admin_subsidy());
 	getchar();//吃掉回车
 
+}
+
+void Admini_Teacher::showall()
+{
+	printf("%-6s\t%s\t%-8.2f\t%-8.2f\t%-7.2f和%-7.2f 教师兼行政人员\n", GetID(), GetName(), GetBasic_salary(), GetSalary_sum(), get_class_hour_salary(), get_admin_subsidy());
+}
+
+void Admini_Teacher::showmenu()
+{
+	cout << "ID\t" << "NAME\t" << "基础工资\t" << "工资总和\t" << "课时和行政补助\t" << "  类别" << endl;
 }
 
 void showinfo(staff* ptr)
