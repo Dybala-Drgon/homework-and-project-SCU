@@ -1,202 +1,235 @@
-#include<iostream>
-#include<cstdio>
+#include <cstdio>
+#include <iostream>
 using namespace std;
 
 class complex {
-private:
-	double real;
-	double image;
-public:
-	complex(double r=0.0,double i=0.0):real(r),image(i){}
-	void print();
-	friend complex operator +(const complex& t1, const complex& t2);
-	friend complex operator -(const complex& t1, const complex& t2);
-	friend complex operator *(const complex& t1, const complex& t2);
-	friend complex operator /(const complex& t1, const complex& t2);//·Ö±ğÓÃÓÑÔªº¯ÊıÊµÏÖ²Ù×÷·ûÖØÔØ
+  private:
+    double real;
+    double image;
+
+  public:
+    complex(double r = 0.0, double i = 0.0) : real(r), image(i) {}
+    void print();
+    friend complex operator+(const complex &t1, const complex &t2);
+    friend complex operator-(const complex &t1, const complex &t2);
+    friend complex operator*(const complex &t1, const complex &t2);
+    friend complex operator/(const complex &t1, const complex &t2); //åˆ†åˆ«ç”¨å‹å…ƒå‡½æ•°å®ç°æ“ä½œç¬¦é‡è½½
 };
 
 void complex::print() {
-	if(image>0)
-	cout <<"="<< real << "+" << image << "i" << endl;
-	else
-	cout <<"="<< real << image << "i" << endl;
+    if (image > 0)
+        cout << "=" << real << "+" << image << "i" << endl;
+    else
+        cout << "=" << real << image << "i" << endl;
 }
-	//ÖØÔØ¼Ó·¨
-complex operator+(const complex& t1, const complex& t2)
-{
-	return complex(t1.real+t2.real,t1.image+t2.image);
+//é‡è½½åŠ æ³•
+complex operator+(const complex &t1, const complex &t2) {
+    return complex(t1.real + t2.real, t1.image + t2.image);
 }
-//ÖØÔØ¼õ·¨
-complex operator-(const complex& t1, const complex& t2)
-{
-	return complex(t1.real - t2.real, t1.image - t2.image);
-}  
-//ÖØÔØ³Ë·¨
-complex operator*(const complex& t1, const complex& t2)
-{
-	return complex(t1.real*t2.real-t1.image*t2.image,t1.real*t2.image+t1.image*t2.real);
-}	 
-//ÖØÔØ³ı·¨
-complex operator/(const complex& t1, const complex& t2)
-{
-	double tem = t2.image * t2.image + t2.real * t2.real;
-	complex t3(t2.real, -t2.image);//ÉèÖÃÖĞ×ª¸´Êı
-	 t3 = t3 * t1;//·Ö×Ó
-	return complex(t3.real/tem,t3.image/tem);
+//é‡è½½å‡æ³•
+complex operator-(const complex &t1, const complex &t2) {
+    return complex(t1.real - t2.real, t1.image - t2.image);
+}
+//é‡è½½ä¹˜æ³•
+complex operator*(const complex &t1, const complex &t2) {
+    return complex(t1.real * t2.real - t1.image * t2.image,
+                   t1.real * t2.image + t1.image * t2.real);
+}
+//é‡è½½é™¤æ³•
+complex operator/(const complex &t1, const complex &t2) {
+    double tem = t2.image * t2.image + t2.real * t2.real;
+    complex t3(t2.real, -t2.image); //è®¾ç½®ä¸­è½¬å¤æ•°
+    t3 = t3 * t1;                   //åˆ†å­
+    return complex(t3.real / tem, t3.image / tem);
 }
 //-----------------------------------------------------------------------
-//½ÓÏÂÀ´ÊµÏÖrationÀà
+//æ¥ä¸‹æ¥å®ç°rationç±»
 class ration {
-private:
-	int denominator, numerator;
-public:
-	ration(int n=0,int d=1):denominator(d),numerator(n){}	 //µÚÒ»¸ö²ÎÊıÊÇ·Ö×Ó
-	void print();
-	ration operator +(const ration& t);
-	ration operator -(const ration& t);
-	ration operator *(const ration& t);
-	ration operator /(const ration& t);//Ê¹ÓÃ³ÉÔ±º¯ÊıÊµÏÖ+-*/
+  private:
+    int denominator, numerator;
+    double value;
+
+  public:
+    ration(int n = 0, int d = 1)
+        : denominator(d), numerator(n) {} //ç¬¬ä¸€ä¸ªå‚æ•°æ˜¯åˆ†å­
+    void print();
+    void optimization();
+    void real();
+    ration operator+(const ration &t);
+    ration operator-(const ration &t);
+    ration operator*(const ration &t);
+    ration operator/(const ration &t); //ä½¿ç”¨æˆå‘˜å‡½æ•°å®ç°+-*/
 };
-void ration::print() {//Ê¹ÓÃÕ·×ªÏà³ı·¨À´¼ÆËã×î´ó¹«Ô¼Êı
-	int rem;
-	int n = denominator, m = numerator;
-	while (n > 0) {
-		rem = m % n;
-		m = n;
-		n = rem;
-	}
-	//×î´ó¹«Ô¼ÊıÊÇm
-	denominator /= m;
-	numerator /= m;
-	cout << "="<<numerator << "/" << denominator << endl;
+
+void ration::optimization(){
+    //ä½¿ç”¨è¾—è½¬ç›¸é™¤æ³•æ¥è®¡ç®—æœ€å¤§å…¬çº¦æ•°
+    int rem;
+    int n = denominator, m = numerator;
+    if (n < 0)
+        n = -n;
+    if (m < 0)
+        m = -m;
+    while (n > 0) {
+        rem = m % n;
+        m = n;
+        n = rem;
+    }
+    //æœ€å¤§å…¬çº¦æ•°æ˜¯m
+    denominator /= m;
+    numerator /= m;
+    if(denominator<0&&numerator<0){
+        denominator=-denominator;
+        numerator=-numerator;
+    }
 }
 
-ration ration::operator+(const ration& t)
-{
-	return ration(this->numerator*t.denominator+t.numerator*this->denominator,this->denominator*t.denominator);
+void ration::real(){
+    value=double(numerator)/double(denominator);
 }
 
-ration ration::operator-(const ration& t)
-{
-	return ration(this->numerator * t.denominator - t.numerator * this->denominator, this->denominator * t.denominator);
+void ration::print() { 
+    if (denominator!=0)
+    cout << "=" << numerator << "/" << denominator <<"="<<value <<endl;
+    else 
+    cout<<"åˆ†æ¯ä¸º0"<<endl;
 }
 
-ration ration::operator*(const ration& t)
-{
-	return ration(t.numerator*this->numerator,t.denominator*this->denominator);
+ration ration::operator+(const ration &t) {
+    return ration(this->numerator * t.denominator +
+                      t.numerator * this->denominator,
+                  this->denominator * t.denominator);
 }
 
-ration ration::operator/(const ration& t)
-{
-	return ration(t.denominator*this->numerator,this->denominator*t.numerator);
+ration ration::operator-(const ration &t) {
+    return ration(this->numerator * t.denominator -
+                      t.numerator * this->denominator,
+                  this->denominator * t.denominator);
 }
-  //ÊµÏÖÍê±Ï----------------------------------------------------------------------------------------------
- //ÊµÏÖ½çÃæÀà
+
+ration ration::operator*(const ration &t) {
+    return ration(t.numerator * this->numerator,
+                  t.denominator * this->denominator);
+}
+
+ration ration::operator/(const ration &t) {
+    return ration(t.denominator * this->numerator,
+                  this->denominator * t.numerator);
+}
+//å®ç°å®Œæ¯•----------------------------------------------------------------------------------------------
+//å®ç°ç•Œé¢ç±»
 class view {
-public:
-	void com();
-	void rat();
+  public:
+    void com();
+    void rat();
+    void menu();
 };
 
-//²âÊÔ´úÂë ----------------main function--------------------------------
+//æµ‹è¯•ä»£ç  ----------------main function--------------------------------
 int main() {
-	int select;
-	for (;;) {
-	 cout << "Ñ¡ÔñÔËËãÄ£Ê½£¬1£º¸´Êı£¬2£ºÓĞÀíÊı£¬3£ºÍË³ö" << endl;
-	 cin >> select;
-	// fflush(stdin);//Çå³ı¼üÅÌ»º³å
-	 view a;
-	switch (select)
-	{
-	case 1:a.com();
-		break;
-	case 2:a.rat();
-		break;
-	case 3:return 0;
-	default:
-		cout << "ÊäÈë´íÎó£¬ÖØÊÔ" << endl;
-		break;
-	}  
-	//fflush(stdin);//Çå³ı¼üÅÌ»º³å
+    view interface;
+    interface.menu();
+    return 0;
 }
-	
 
-	return 0;
-}//-------------------------------------------------------------------
-
+//-------------------------------------------------------------------
+void view::menu() {
+    int select;
+    for (;;) {
+        cout << "é€‰æ‹©è¿ç®—æ¨¡å¼ï¼Œ1ï¼šå¤æ•°ï¼Œ2ï¼šæœ‰ç†æ•°ï¼Œ3ï¼šé€€å‡º" << endl;
+        cin >> select;
+        getchar(); //åƒæ‰å›è½¦
+        view a;
+        switch (select) {
+        case 1:
+            com();
+            break;
+        case 2:
+            rat();
+            break;
+        case 3:
+            return;
+        default:
+            cout << "è¾“å…¥é”™è¯¯ï¼Œé‡è¯•" << endl;
+            break;
+        }
+    }
+}
 
 void view::com() {
-	for (;;) {
-		double r1, i1, r2, i2;
-		char key = '1';
-		char n;
-		cout << "ÒÀ´ÎÊäÈëÁ½¸ö¸´Êı£¬¸ñÊ½£º(a+bi)ÔËËã·û(a+bi)" << endl;
-		getchar();
-		scanf("(%lf%lfi)%c(%lf%lfi)", &r1, &i1, &n, &r2, &i2); //Ê¹ÓÃscanf¿ØÖÆ¸ñÊ½
-		//fflush(stdin);//Çå³ı¼üÅÌ»º³å
-		complex t1(r1, i1);
-		complex t2(r2, i2);	 //¹¹ÔìÁ½¸ö¸´Êı
-		complex c;
-		//fflush(stdin);//Çå³ı¼üÅÌ»º´æ
-		switch (n) {
-		case '+':
-			c = t1 + t2;
-			c.print();
-			break;
+    for (;;) {
+        double r1, i1, r2, i2;
+        char key = '1';
+        char n;
+        cout << "ä¾æ¬¡è¾“å…¥ä¸¤ä¸ªå¤æ•°ï¼Œæ ¼å¼ï¼š(a+bi)è¿ç®—ç¬¦(a+bi)" << endl;
+        scanf("(%lf%lfi)%c(%lf%lfi)", &r1, &i1, &n, &r2,
+              &i2); //ä½¿ç”¨scanfæ§åˆ¶æ ¼å¼
+        getchar();
+        complex t1(r1, i1);
+        complex t2(r2, i2); //æ„é€ ä¸¤ä¸ªå¤æ•°
+        complex c;
+        switch (n) {
+        case '+':
+            c = t1 + t2;
+            c.print();
+            break;
 
-		case '-':
-			c = t1 - t2;
-			c.print();
-			break;
-		case '*':
-			c = t1 * t2;
-			c.print();
-			break;
-		case '/':
-			c = t1 / t2;
-			c.print();
-			break;
-		}
-		cout << "°´0ÍË³ö" << endl;
-		getchar();
-		scanf("%c", &key);
-		//fflush(stdin);//Çå³ı¼üÅÌ»º´æ
-		if (key == '0')break;
-	}
+        case '-':
+            c = t1 - t2;
+            c.print();
+            break;
+        case '*':
+            c = t1 * t2;
+            c.print();
+            break;
+        case '/':
+            c = t1 / t2;
+            c.print();
+            break;
+        }
+        cout << "æŒ‰0é€€å‡º" << endl;
+        scanf("%c", &key);
+        getchar();
+        if (key == '0') {
+            system("cls");
+            break;
+        }
+    }
 }
 void view::rat() {
-	for (;;) {
-		int z1, m1, z2, m2;
-		char key = '1'; char n;
-		cout << "ÒÀ´ÎÊäÈëÁ½¸öÓĞÀíÊı£¬°´·Ö×Ó/·ÖÄ¸Ë³Ğò" << endl;
-		scanf("%d/%d%c%d/%d", &z1, &m1, &n, &z2, &m2);
-		fflush(stdin);//Çå³ı¼üÅÌ»º³å
-		ration r1(z1, m1);
-		ration r2(z2, m2);
-		ration c;
-		fflush(stdin);//Çå³ı¼üÅÌ»º´æ
-		switch (n) {
-		case '+':
-			c = r1 + r2;
-			c.print();
-			break;
-		case '-':
-			c = r1 - r2;
-			c.print();
-			break;
-		case '*':
-			c = r1 * r2;
-			c.print();
-			break;
-		case '/':
-			c = r1 / r2;
-			c.print();
-			break;
-		}
-		cout << "°´0ÍË³ö" << endl;
-		cin >> key;
-		fflush(stdin);//Çå³ı¼üÅÌ»º´æ
-		if (key == '0')break;
-	}
+    for (;;) {
+        int z1, m1, z2, m2;
+        char key = '1';
+        char n;
+        cout << "ä¾æ¬¡è¾“å…¥ä¸¤ä¸ªæœ‰ç†æ•°ï¼ŒæŒ‰åˆ†å­/åˆ†æ¯ æ“ä½œç¬¦ åˆ†å­/åˆ†æ¯é¡ºåº" << endl;
+        scanf("%d/%d%c%d/%d", &z1, &m1, &n, &z2, &m2);
+        getchar();
+        ration r1(z1, m1);
+        ration r2(z2, m2);
+        ration c;
+        fflush(stdin); //æ¸…é™¤é”®ç›˜ç¼“å­˜
+        switch (n) {
+        case '+':
+            c = r1 + r2;
+            break;
+        case '-':
+            c = r1 - r2;
+            break;
+        case '*':
+            c = r1 * r2;
+            break;
+        case '/':
+            c = r1 / r2;
+            break;
+        }
+        c.optimization();
+        c.real();
+        c.print();
+        cout << "æŒ‰0é€€å‡º" << endl;
+        cin >> key;
+        getchar();
+        if (key == '0') {
+            system("cls");
+            break;
+        }
+    }
 }
-
