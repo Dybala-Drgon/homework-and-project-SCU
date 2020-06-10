@@ -173,13 +173,13 @@ void interface::compare(char s[], int n, Teacher* &teacher_pos, Experimenter* &e
 		}
 		Admini* temp2 = admi_head;
 		while (temp2->next!=nullptr) {
-			temp2 = temp2->next;
-			if (temp2 == nullptr)break;
+			
 			if (strcmp(s, temp2->next->GetID()) == 0) {
 				showinfo(temp2->next);
 				admi_pos = temp2;
 				return;
 			}
+			temp2 = temp2->next;
 		}
 		Teacher_Experimenter* temp3 = teach_exper_head;
 		while (temp3->next != nullptr) {
