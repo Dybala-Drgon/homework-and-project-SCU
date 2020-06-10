@@ -1,5 +1,6 @@
 #include<iostream>
 #include<cstdio>
+#include<cstdlib>
 #include<cstring>
 #include"staff.h"//引入staff信息
 
@@ -21,11 +22,14 @@ public:
 	void showall();
 	void search();
 	void del();
+	void save();//				 保存函数
+	void read();//               读取函数
 	void compare
 	(char s[],int n, Teacher* &teacher_pos, Experimenter* &exper_pos, 
 		Admini* &admi_pos, Teacher_Experimenter* &teach_exper_pos, Admini_Teacher* &admi_teach_pos);
 	//指针的引用才能修改（查了某sdn，博客园，终于发现了问题）
 	//比较函数，用于查找信息
+
 	//增加成员提炼成函数模板，提高复用性
 	template<typename Ptr>
 	void add(Ptr* p,Ptr* t) {
@@ -83,9 +87,12 @@ void interface ::display() {
 			del();
 			break;
 		case 5:	//  保存
+
+			save();
 			lab = 0;
 			break;
 		case 6:	//  读取
+			read();
 			lab = 0;
 			break;
 		case 0:
@@ -432,8 +439,162 @@ void interface::del() {
 		return;
 	}
 }
+//		保存函数
+void interface::save() {
+	FILE* fp1 =  fopen("D:\\data\\da1.dal", "wb");
+	FILE* fp2 = fopen("D:\\data\\da2.dal", "wb");
+	FILE* fp3 = fopen("D:\\data\\da3.dal", "wb");
+	FILE* fp4 = fopen("D:\\data\\da4.dal", "wb");
+	FILE* fp5 = fopen("D:\\data\\da5.dal", "wb");
+	if (fp1 == NULL||fp2==NULL||fp3==NULL||fp4==NULL||fp5==NULL)
+	{
+		printf("Can not open the file!\n");
+		cout << "任意键退出" << endl;
+		getchar();
+		return;
+	}
+	Teacher* teacher_pos = teacher_head->next;
+	Experimenter* exper_pos = exper_head->next;
+	Admini* admi_pos = admi_head->next;
+	Teacher_Experimenter* teach_exper_pos = teach_exper_head->next;
+	Admini_Teacher* admi_teach_pos = admi_teach_head->next;
+	while (teacher_pos != NULL)
+	{
+		if (fwrite(teacher_pos, sizeof(class Teacher), 1, fp1) != 1)
+		{
+			cout << "写入teacher数据出错" << endl;
+			fclose(fp1);
+			return;
+		}
+		teacher_pos = teacher_pos->next;
+	}		
+	while (exper_pos != NULL)
+	{
+		if (fwrite(exper_pos, sizeof(class Experimenter), 1, fp2) != 1)
+		{
+			cout << "写入experimenter数据出错" << endl;
+			fclose(fp2);
+			return;
+		}
+		exper_pos = exper_pos->next;
+	}
+	while (admi_pos != NULL)
+	{
+		if (fwrite(admi_pos, sizeof(class Admini), 1, fp3) != 1)
+		{
+			cout << "写入admini数据出错" << endl;
+			fclose(fp3);
+			return;
+		}
+		admi_pos = admi_pos->next;
+	}
+	while (teach_exper_pos != NULL)
+	{
+		if (fwrite(teach_exper_pos, sizeof(class Teacher_Experimenter), 1, fp4) != 1)
+		{
+			cout << "写入teacher_experimenter数据出错" << endl;
+			fclose(fp4);
+			return;
+		}
+		teach_exper_pos = teach_exper_pos->next;
+	}
+	while (admi_teach_pos != NULL)
+	{
+		if (fwrite(admi_teach_pos, sizeof(class Admini_Teacher), 1, fp5) != 1)
+		{
+			cout << "写入admi_teach数据出错" << endl;
+			fclose(fp5);
+			return;
+		}
+		admi_teach_pos = admi_teach_pos->next;
+	}
+	fclose(fp1);
+	fclose(fp2);
+	fclose(fp3);
+	fclose(fp4);
+	fclose(fp5);
 
+	cout<<"存储完成\n"<<endl;
+	cout << "任意键退出" << endl;
+	getchar();
+}
 
+void interface::read() {
+	FILE* fp1 = fopen("D:\\data\\da1.dal", "rb+");
+	FILE* fp2 = fopen("D:\\data\\da2.dal", "rb+");
+	FILE* fp3 = fopen("D:\\data\\da3.dal", "rb+");
+	FILE* fp4 = fopen("D:\\data\\da4.dal", "rb+");
+	FILE* fp5 = fopen("D:\\data\\da5.dal", "rb+");
+	int ch;
+	if (fp1 == NULL || fp2 == NULL || fp3 == NULL || fp4 == NULL || fp5 == NULL)
+	{
+		printf("Can not open the file!\n");
+		cout << "任意键退出" << endl;
+		getchar();
+		return;
+	}
+	Teacher* teacher_pos = teacher_head;
+	Experimenter* exper_pos = exper_head;														   
+	Admini* admi_pos = admi_head;
+	Teacher_Experimenter* teach_exper_pos = teach_exper_head;
+	Admini_Teacher* admi_teach_pos = admi_teach_head;
+	 do
+	{
+		 ch = fgetc(fp1);
+		 if (ch == EOF)break;
+		Teacher* t = new Teacher; 
+		fread(t,sizeof(class Teacher), 1, fp1);
+		teacher_pos->next = t;                 
+		teacher_pos = teacher_pos->next;
+		
+	} while (teacher_pos->next != NULL);
+
+	 do
+	{	ch = fgetc(fp2);
+		if (ch == EOF)break;  
+		Experimenter* t = new(Experimenter);
+		fread(t, sizeof(class Experimenter), 1, fp2);
+		exper_pos->next = t;
+		exper_pos = exper_pos->next;
+
+	} while (exper_pos->next != NULL);
+	  do
+	{
+		  ch = fgetc(fp3);
+		  if (ch == EOF)break;
+		Admini* t = new(Admini);
+		admi_pos->next = t;
+		fread(t, sizeof(class Admini), 1, fp3);
+		admi_pos = admi_pos->next;
+	} while (admi_pos ->next!= NULL);
+	  do
+	{
+		  ch = fgetc(fp4);
+		  if (ch == EOF)break;
+		Teacher_Experimenter* t = new(Teacher_Experimenter);
+		teach_exper_pos->next = t;
+		fread(t, sizeof(class Teacher_Experimenter), 1, fp4);
+		teach_exper_pos = teach_exper_pos->next;
+	} while (teach_exper_pos ->next!= NULL);
+	  do
+	{
+		  ch = fgetc(fp5);
+		  if (ch == EOF)break;
+		Admini_Teacher* t = new Admini_Teacher;
+		admi_teach_pos->next = t;
+		fread(t, sizeof(class Admini_Teacher), 1, fp5);
+		admi_teach_pos = admi_teach_pos->next;
+
+	}while (admi_teach_pos ->next!= NULL);
+	fclose(fp1);
+	fclose(fp2);
+	fclose(fp3);
+	fclose(fp4);
+	fclose(fp5);
+	printf("读取完成!\n");
+	system("pause");
+	system("cls");
+ }
 
 
 
