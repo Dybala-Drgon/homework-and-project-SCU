@@ -79,6 +79,7 @@ double Teacher::get_class_hour_salary()
 
 void Teacher::showall()
 {
+	
 	printf("%-6s\t%s\t%-8.2f\t%-8.2f\t%-8.2f\t任课教师\n", GetID(), GetName(), GetBasic_salary(), GetSalary_sum(), class_hour_salary);
 }
 
@@ -220,3 +221,4 @@ void showinfo(staff* ptr)
 		ptr->show();
 	
 }
+
